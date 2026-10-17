@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+{% block title %}Préstamos{% endblock %}
+{% block content %}
+<h1>Todos los préstamos</h1>
+<form method="get" class="filter-form">
+  <select name="status" onchange="this.form.submit()">
+    <option value="">Todos los estados</option>
+    <option value="active" {% if status == 'active' %}selected{% endif %}>En curso</option>
+    <option value="overdue" {% if status == 'overdue' %}selected{% endif %}>Vencidos</option>
+    <option value="returned" {% if status == 'returned' %}selected{% endif %}>Devueltos</option>
+    <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Cancelados</option>
+  </select>
+</form>
+{% include 'loans/_table.html' with show_user=True %}
+{% include 'core/_pagination.html' %}
+{% endblock %}

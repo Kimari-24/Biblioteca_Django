@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="kpis">
+  <article><strong>{{ kpis.books }}</strong><small>Libros</small></article>
+  <article><strong>{{ kpis.copies_available }}</strong><small>Copias disponibles</small></article>
+  <article><strong>{{ kpis.loans }}</strong><small>Préstamos totales</small></article>
+  <article><strong>{{ kpis.active }}</strong><small>Préstamos activos</small></article>
+  <article><strong>{{ kpis.overdue }}</strong><small>⚠ Vencidos</small></article>
+</div>
+<br>
+<div class="charts">
+  <article><header>Préstamos por mes</header>{{ chart_months }}</article>
+  <article><header>Préstamos por estado</header>{{ chart_status }}</article>
+  <article><header>Libros más prestados</header>{{ chart_top }}</article>
+  <article><header>Préstamos por categoría</header>{{ chart_category }}</article>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination" aria-label="Paginación">
+  {% if page_obj.has_previous %}
+    <a role="button" class="outline secondary" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">‹ Anterior</a>
+  {% else %}
+    <span class="page-disabled">‹ Anterior</span>
+  {% endif %}
+  <span class="page-numbers">
+    {% for p in page_range %}
+      {% if p == page_obj.paginator.ELLIPSIS %}
+        <span class="page-gap">…</span>
+      {% elif p == page_obj.number %}
+        <span class="page-current" aria-current="page">{{ p }}</span>
+      {% else %}
+        <a role="button" class="outline secondary" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ p }}">{{ p }}</a>
+      {% endif %}
+    {% endfor %}
+  </span>
+  {% if page_obj.has_next %}
+    <a role="button" class="outline secondary" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Siguiente ›</a>
+  {% else %}
+    <span class="page-disabled">Siguiente ›</span>
+  {% endif %}
+</div>
+<p class="page-status">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }} · {{ page_obj.paginator.count }} resultados</p>
+{% endif %}

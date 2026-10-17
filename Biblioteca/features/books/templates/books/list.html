@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% block title %}Libros{% endblock %}
+{% block content %}
+<hgroup>
+  <h1>Catálogo</h1>
+  <p>{{ page_obj.paginator.count }} libro{{ page_obj.paginator.count|pluralize }}</p>
+</hgroup>
+
+<form method="get" class="search-form">
+  <input type="search" name="q" value="{{ q }}" placeholder="Título o autor">
+  <select name="category">
+    <option value="">Todas las categorías</option>
+    {% for c in categories %}<option value="{{ c }}" {% if c == category %}selected{% endif %}>{{ c }}</option>{% endfor %}
+  </select>
+  <button type="submit">Buscar</button>
+  {% if current_user.role == 'librarian' %}
+    <a href="{% url 'books:create' %}" role="button" class="secondary">+ Nuevo libro</a>
+  {% endif %}
+</form>
+
+<figure>
+<table class="table-cards books-table">
+  <thead><tr><th>Título</th><th>Autor</th><th>Categoría</th><th>Disponibles</th><th></th></tr></thead>
+  <tbody>
+  {% for book in page_obj %}
+    <tr>
+      <td data-label="Título">{{ book.title }}</td>
+      <td data-label="Autor">{{ book.author }}</td>
+      <td data-label="Categoría">{{ book.category }}</td>
+      <td data-label="Disponibles">{{ book.copies_available }} / {{ book.copies_total }}</td>
+      <td class="cell-actions">
+        <div class="actions">
+        {% if current_user.role == 'student' %}
+          <form method="post" action="{% url 'loans:borrow' book.id %}">{% csrf_token %}
+            <button type="submit" {% if book.copies_available < 1 %}disabled{% endif %}>Prestar</button>
+          </form>
+        {% else %}
+          <a href="{% url 'books:edit' book.id %}" role="button" class="outline">Editar</a>
+          <form method="post" action="{% url 'books:delete' book.id %}" onsubmit="return confirm('¿Eliminar este libro?')">{% csrf_token %}
+            <button type="submit" class="outline secondary">Eliminar</button>
+          </form>
+        {% endif %}
+        </div>
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5">No hay libros que coincidan.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</figure>
+
+{% include 'core/_pagination.html' %}
+{% endblock %}

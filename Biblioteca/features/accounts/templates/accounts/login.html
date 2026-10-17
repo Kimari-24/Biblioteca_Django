@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+{% block title %}Ingresar{% endblock %}
+{% block content %}
+<article class="auth-card">
+  <h2>Iniciar sesión</h2>
+  <form method="post">{% csrf_token %}
+    {% include 'core/_form.html' %}
+    <button type="submit">Ingresar</button>
+  </form>
+  <p>¿No tienes cuenta? <a href="{% url 'accounts:register' %}">Regístrate como estudiante</a></p>
+</article>
+{% endblock %}

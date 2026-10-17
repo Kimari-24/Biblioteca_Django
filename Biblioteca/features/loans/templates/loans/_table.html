@@ -1,0 +1,42 @@
+<figure>
+<table class="table-cards">
+  <thead>
+    <tr>
+      {% if show_user %}<th>Estudiante</th>{% endif %}
+      <th>Libro</th><th>Prestado</th><th>Vence</th><th>Estado</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for loan in page_obj %}
+    <tr>
+      {% if show_user %}<td data-label="Estudiante"><div>{{ loan.user_name }}<br><small>{{ loan.user_email }}</small></div></td>{% endif %}
+      <td data-label="Libro">{{ loan.book_title }}</td>
+      <td data-label="Prestado">{{ loan.loaned_at|date:"d M Y" }}</td>
+      <td data-label="Vence">{{ loan.due_at|date:"d M Y" }}</td>
+      <td data-label="Estado">
+        {% if loan.overdue %}<span class="badge badge-overdue">⚠ Vencido</span>
+        {% elif loan.status == 'active' %}<span class="badge badge-active">En curso</span>
+        {% elif loan.status == 'returned' %}<span class="badge badge-returned">✓ Devuelto</span>
+        {% else %}<span class="badge badge-cancelled">Cancelado</span>{% endif %}
+      </td>
+      <td class="cell-actions">
+        {% if loan.status == 'active' %}
+        <div class="actions">
+          <form method="post" action="{% url 'loans:return' loan.id %}">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button type="submit">Devolver</button>
+          </form>
+          <form method="post" action="{% url 'loans:cancel' loan.id %}" onsubmit="return confirm('¿Cancelar este préstamo?')">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button type="submit" class="outline secondary">Cancelar</button>
+          </form>
+        </div>
+        {% endif %}
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6">No hay préstamos.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</figure>

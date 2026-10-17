@@ -1,0 +1,96 @@
+/* Estilos propios sobre Pico CSS. Breakpoints: 768px (tablet) y 480px (móvil). */
+
+/* --- Navegación ---------------------------------------------------------- */
+nav { flex-wrap: wrap; row-gap: .25rem; }
+nav ul { flex-wrap: wrap; }
+nav form { margin: 0; }
+.nav-logout { margin: 0; width: auto; padding: .25rem .8rem; }
+
+/* --- Mensajes y formularios ---------------------------------------------- */
+.flash { padding: .7rem 1rem; margin-bottom: 1rem; border-left: 4px solid #0ca30c; }
+.flash-error { border-left-color: #d03b3b; }
+.field-error { color: #d03b3b; }
+.auth-card { max-width: 28rem; margin: 2rem auto; }
+.form-card { max-width: 36rem; margin: 1rem auto; }
+
+/* --- Buscador y filtros -------------------------------------------------- */
+.search-form { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: 1.25rem; }
+.search-form :is(input, select, button, a) { margin: 0; width: auto; }
+.search-form input[type=search] { flex: 1 1 14rem; min-width: 0; }
+.search-form select { flex: 0 1 14rem; min-width: 0; }
+.search-form button, .search-form a[role=button] { white-space: nowrap; }
+.filter-form { max-width: 18rem; }
+
+/* --- Acciones en tablas -------------------------------------------------- */
+td form { margin: 0; }
+.actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.books-table td .actions { flex-wrap: nowrap; } /* en escritorio Editar/Eliminar van en una línea */
+.actions button, .actions a { margin: 0; padding: .25rem .7rem; font-size: .85rem; width: auto; }
+
+/* --- Paginación ---------------------------------------------------------- */
+.pagination { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; align-items: center; margin-top: 1.5rem; }
+.pagination a, .pagination span.page-current, .pagination span.page-disabled {
+  margin: 0; width: auto; padding: .3rem .75rem; font-size: .9rem; border-radius: var(--pico-border-radius);
+}
+.page-numbers { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+.page-current { background: var(--pico-primary-background); color: var(--pico-primary-inverse); font-weight: 600; }
+.page-disabled, .page-gap { color: var(--pico-muted-color); }
+.page-status { margin-top: .6rem; text-align: center; font-size: .85rem; color: var(--pico-muted-color); }
+@media (max-width: 480px) { .page-numbers { display: none; } } /* en móvil solo Anterior / Siguiente */
+
+/* --- Insignias de estado ------------------------------------------------- */
+.badge { display: inline-block; padding: .1rem .6rem; border-radius: 1rem; font-size: .8rem; font-weight: 600; white-space: nowrap; }
+.badge-active { background: #cde2fb; color: #0d366b; }
+.badge-overdue { background: #f6d3d3; color: #7a1f1f; }
+.badge-returned { background: #d3efd3; color: #064d06; }
+.badge-cancelled { background: #e1e0d9; color: #52514e; }
+
+/* --- Dashboard ----------------------------------------------------------- */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+.kpis article { margin: 0; text-align: center; }
+.kpis strong { display: block; font-size: 2rem; line-height: 1.2; }
+.charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.charts article { margin: 0; min-width: 0; overflow: hidden; }
+
+/* --- Responsive: tablet (≤ 768px) ---------------------------------------- */
+@media (max-width: 768px) {
+  /* Menú en dos filas: marca arriba, enlaces y "Salir" debajo */
+  nav { flex-direction: column; align-items: flex-start; row-gap: 0; }
+  nav li { padding-top: .35rem; padding-bottom: .35rem; }
+  nav ul:last-child { margin-left: calc(var(--pico-nav-element-spacing-horizontal) * -1); }
+
+  /* Las tablas pasan a tarjetas: cada fila es una tarjeta y cada celda "etiqueta: valor" */
+  .table-cards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .table-cards, .table-cards tbody, .table-cards tr, .table-cards td { display: block; width: 100%; }
+  .table-cards tr {
+    margin-bottom: 1rem; padding: .4rem .9rem;
+    border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius);
+  }
+  .table-cards td {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: .4rem 0; border: 0; text-align: right;
+  }
+  .table-cards td + td { border-top: 1px solid var(--pico-muted-border-color); }
+  .table-cards td::before { content: attr(data-label); flex: none; font-weight: 600; text-align: left; color: var(--pico-muted-color); }
+  .table-cards td > div { min-width: 0; overflow-wrap: anywhere; }
+  .table-cards .cell-actions:not(:has(.actions)) { display: none; } /* sin botones, sin celda */
+  .table-cards .cell-actions .actions { width: 100%; }
+  .table-cards .cell-actions .actions > * { flex: 1; }
+  .table-cards .cell-actions .actions button, .table-cards .cell-actions .actions a { width: 100%; padding: .5rem; }
+
+  .filter-form { max-width: none; }
+}
+
+/* --- Responsive: móvil (≤ 700px y ≤ 480px) ------------------------------- */
+@media (max-width: 700px) {
+  .charts { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .kpis article:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .kpis strong { font-size: 1.6rem; }
+  .nav-role { display: none; }
+  .search-form > * { flex: 1 1 100%; }
+  h1 { font-size: 1.7rem; }
+  .auth-card, .form-card { margin-top: .5rem; }
+}

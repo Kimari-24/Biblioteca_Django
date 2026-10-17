@@ -1,0 +1,46 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Biblioteca{% endblock %} · Biblioteca TdeA</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
+  <link rel="stylesheet" href="{% static 'core/css/site.css' %}">
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <ul><li><strong><a href="{% url 'core:home' %}" class="contrast">📚 Biblioteca</a></strong></li></ul>
+      <ul>
+        {% if current_user %}
+          <li><a href="{% url 'books:list' %}">Libros</a></li>
+          {% if current_user.role == 'librarian' %}
+            <li><a href="{% url 'loans:all' %}">Préstamos</a></li>
+            <li><a href="{% url 'dashboard:index' %}">Dashboard</a></li>
+          {% else %}
+            <li><a href="{% url 'loans:mine' %}">Mis préstamos</a></li>
+          {% endif %}
+          <li>
+            <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
+              <button class="outline secondary nav-logout">
+                Salir ({{ current_user.name }}<span class="nav-role"> · {% if current_user.role == 'librarian' %}bibliotecario{% else %}estudiante{% endif %}</span>)
+              </button>
+            </form>
+          </li>
+        {% else %}
+          <li><a href="{% url 'accounts:login' %}">Ingresar</a></li>
+          <li><a href="{% url 'accounts:register' %}">Registrarse</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    {% for message in messages %}
+      <article class="flash{% if message.tags == 'error' %} flash-error{% endif %}">
+        {{ message }}
+      </article>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

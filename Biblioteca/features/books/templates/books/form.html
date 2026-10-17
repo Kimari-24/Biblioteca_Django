@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<article class="form-card">
+  <h2>{{ title }}</h2>
+  <form method="post">{% csrf_token %}
+    {% include 'core/_form.html' %}
+    <div class="actions">
+      <button type="submit">Guardar</button>
+      <a href="{% url 'books:list' %}" role="button" class="secondary outline">Cancelar</a>
+    </div>
+  </form>
+</article>
+{% endblock %}

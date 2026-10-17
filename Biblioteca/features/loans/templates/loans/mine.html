@@ -1,0 +1,7 @@
+{% extends 'core/base.html' %}
+{% block title %}Mis préstamos{% endblock %}
+{% block content %}
+<hgroup><h1>Mis préstamos</h1><p>Puedes tener hasta 3 préstamos activos a la vez.</p></hgroup>
+{% include 'loans/_table.html' with show_user=False %}
+{% include 'core/_pagination.html' %}
+{% endblock %}
